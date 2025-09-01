@@ -1,5 +1,7 @@
 from flask import Flask, jsonify
 import os
+from src.auth import auth
+from src.bookmarks import bookmarks
 
 """ creating aan instance of flask"""
 def  create_app(test_config= None):
@@ -10,22 +12,14 @@ def  create_app(test_config= None):
     app = Flask(__name__,instance_relative_config=True)
     if test_config is None:
         
-        app.config.from_mapping(SECRETE_KEY=os.environ.get"SECRETE_KEY",
+        app.config.from_mapping(SECRETE_KEY=os.environ.get("SECRETE_KEY"),
                                 )
     else:
-         app.config.from_mapping(test_config)
-    @app.get("/")
-    def index():
-        return  'hell0 gamers'
+        app.config.from_mapping(test_config)
+        '''register the auth and bookmarks method to enable it for lookup'''
 
-    @app.get("/hello")
-    def sayHello():
-        return jsonify({
-        "say hi": 'whatsup guys'
-    })
+    app.register_blueprint(auth)
+    app.register_blueprint(bookmarks)
+
     return app   
   
-
-
-    if __name__ == '__main__':
-        app.run(port=8000)  # Runs the app on port 8000
